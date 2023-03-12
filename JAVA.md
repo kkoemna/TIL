@@ -32,3 +32,25 @@ for(int score : scores) {
 2. 取り出した要素を、定義した変数「score」に代入する
 3. {}内の処理（=scoreを表示する）を行う
 4. 「scores」の要素数分だけ処理を繰り返す
+
+# メソッド
+## 引数を使用しないメソッド
+```
+class Main {
+  public static void main(String[] args) {  
+    sayHello();
+  }
+
+  public static void sayHello() {
+    System.out.println("Hello World");
+    return;
+  }
+}
+```
+1. Mainクラスのmainメソッドが実行される
+2. sayHelloメソッドが実行され、「Hello World」が表示される
+
+Rubyのメソッドとの主な違いは以下の3点
+1. 返り値のデータ型を指定する必要がある
+2. 引数がないメソッドでも定義時に()の省略はできない
+3. Rubyの「def」「end」の代わりに、{}でコードを囲む
