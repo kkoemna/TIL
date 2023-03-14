@@ -47,7 +47,8 @@ class Main {
 }
 ```
 
-## 引数を使用しないメソッド
+## 引数がないメソッド
+引数がない場合も()を省略できない
 ```
 class Main {
   public static void main(String[] args) {  
@@ -62,3 +63,22 @@ class Main {
 ```
 1. Mainクラスのmainメソッドが実行される
 2. sayHelloメソッドが実行され、「Hello World」が表示される
+
+## 引数があるメソッド
+仮引数（受け取る側）は変数名「number」だけでなくデータ型「int」も指定する必要がある
+```
+class Main {
+  public static void main(String[] args) {
+    var answer = square(5);
+    System.out.println(answer);
+  }
+
+  public static int square(int number){
+    return number * number;
+  }
+}
+```
+1. Mainクラスのmainメソッドが実行される
+2. 変数answerに代入するsquareメソッドが実行される際に引数「5」を渡す
+3. squareメソッドが引数「5」を受け取り、乗算処理をおこなう
+4. 結果を変数answerに代入し、それを表示する処理をおこなう
