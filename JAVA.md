@@ -126,3 +126,25 @@ Rubyで使用した「Visual Studio Code」でJavaの開発をおこなうこと
 Javaのウェブアプリのフレームワークとして「Spring Boot」を使用する。<br>
 これは、Rubyにおける「Ruby on Rails」に該当するもの。<br>
 [Spring Initializr（プロジェクト作成)](https://start.spring.io/)
+
+# アノテーション
+アノテーションは「注釈」という意味で、クラスやメソッドに特別な意味を持たせるという役割がある。<br>
+クラスやメソッドの定義の直前に「@〇〇」と記述する。<br>
+たとえば…
+```Java
+@Controller
+public class PostController {
+
+}
+```
+@Controllerは、そのクラスがコントローラーであることをSpringに伝えるためのアノテーション。<br>
+上記の例でいうと、「PostController」クラスがコントローラーとして扱われるようになる。
+
+```Java
+@GetMapping("/hello")
+public String showHello(){
+
+}
+```
+@GetMappingは、ブラウザで入力されたURLと、実行されるメソッドを紐づけるためのアノテーション。<br>
+上記の例でいうと、「ルートパス/hello」と入力された場合、「showHello」メソッドが実行される。
