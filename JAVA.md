@@ -1,6 +1,6 @@
 # 条件分岐
 ## if文
-```
+```java
 if ( 条件式 ) {
   条件式を満たす時に実行する処理
 }
@@ -12,7 +12,7 @@ Rubyのif文との主な違いは以下の3点
 
 # 繰り返し処理
 ## 拡張for文
-```
+```java
 for ( 要素を格納する変数宣言  :  配列あるいはArrayListの変数名) {
   取り出した要素を使用して行う処理
 }
@@ -23,7 +23,7 @@ for ( 要素を格納する変数宣言  :  配列あるいはArrayListの変数
 4. 配列、あるいはArrayListの要素数分だけ処理を繰り返す
 
 たとえば…
-```
+```java
 for(int score : scores) {
   System.out.println(score);  
 }
@@ -39,7 +39,7 @@ Rubyのメソッドとの主な違いは以下の4点
 2. 返り値のデータ型を指定する必要がある
 3. 引数がないメソッドでも定義時に()の省略はできない
 4. 「def」「end」の代わりに、{}でコードを囲む
-```
+```java
 class Main {
   public static void main(String[] args) {  
     実行したい処理
@@ -49,7 +49,7 @@ class Main {
 
 ## 引数がないメソッド
 引数がない場合も()を省略できない
-```
+```java
 class Main {
   public static void main(String[] args) {  
     sayHello();
@@ -66,7 +66,7 @@ class Main {
 
 ## 引数があるメソッド
 仮引数（受け取る側）は変数名「number」だけでなくデータ型「int」も指定する必要がある
-```
+```java
 class Main {
   public static void main(String[] args) {
     var answer = square(5);
@@ -116,3 +116,13 @@ class Main {
 あるメソッドが別のオブジェクトの変数にアクセスしたい場合、相手方のオブジェクトに含まれる「取得用のメソッド」に対して、データ取得を依頼する。<br>
 カレー作りでいうと、例えば、じゃがいもの皮剥きが追加で10個必要になった場合、手が空いている他のチームのメンバーが直接手伝うのではなく、野菜チームに「じゃがいもの皮剥き10個追加お願い！」と依頼する。<br>
 この、他のオブジェクトに必要以上に干渉しないようにする考え方を「カプセル化」という。
+
+# 開発環境
+Rubyで使用した「Visual Studio Code」でJavaの開発をおこなうこともできるが、Javaの専用開発環境である「IntelliJ IDEA」を使用することが多い。<br>
+「IntelliJ IDEA」は、Java開発者の70%以上が使用していると言われる代表的な開発環境。<br>
+[IntelliJ IDEA のダウンロード](https://www.jetbrains.com/ja-jp/idea/download/#section=mac)
+
+# フレームワーク
+Javaのウェブアプリのフレームワークとして「Spring Boot」を使用する。<br>
+これは、Rubyにおける「Ruby on Rails」に該当するもの。<br>
+[Spring Initializr（プロジェクト作成)](https://start.spring.io/)
