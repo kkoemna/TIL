@@ -148,3 +148,24 @@ public String showHello(){
 ```
 @GetMappingは、ブラウザで入力されたURLと、実行されるメソッドを紐づけるためのアノテーション。<br>
 上記の例でいうと、「ルートパス/hello」と入力された場合、「showHello」メソッドが実行される。
+
+# テンプレートエンジン
+Javaのフレームワーク「Spring Boot」のテンプレートエンジンとして「Thymeleaf」を使用する。<br>
+これはRubyのRailsにおける「ERB」に該当するもの。<br>
+コントローラーとビューのコードを分離して管理しやすくすることができる。
+
+## Thymeleafの使い方
+①表示させるためのHTMLを作成する<br>
+「main」→「resources」→「templates」内にHTMLファイルを作成する。ここではファイル名は「hello.html」とする。<br>
+②コントローラーから①のHTMLファイルを読み込めるようにする<br>
+```Java
+@Controller
+public class PostController {
+    @GetMapping("/hello")
+    public String showHello(){
+        return "hello";
+    }
+}
+```
+5行目の`return "hello";`が、表示するHTMLファイルの名称を指定している。<br>
+`return "hello";`と記述することで、「templates」フォルダにある「hello.html」を呼び出すことができる（.html部分は省略可能）。<br>
