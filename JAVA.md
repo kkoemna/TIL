@@ -169,3 +169,20 @@ public class PostController {
 ```
 5行目の`return "hello";`が、表示するHTMLファイルの名称を指定している。<br>
 `return "hello";`と記述することで、「templates」フォルダにある「hello.html」を呼び出すことができる（.html部分は省略可能）。<br>
+
+## Thymeleafでの変数の扱い方
+Sping Bootでは、Model型のオブジェクトを使用して、以下の流れで変数を渡す。<br>
+1. コントローラーの引数でModelオブジェクトを受け取る
+2. Modelオブジェクトに、ビューで表示させたいデータを追加する
+3. ビューでModelオブジェクトのデータを読み込む
+```Java
+@GetMapping("/hello")
+public String showHello(Model model){
+    var sampleText = "サンプルテキスト";
+    model.addAttribute("sampleText", sampleText);
+    return "hello";
+}
+```
+- 2行目は「ここで定義するshowHelloメソッドを実行するときには、Modelオブジェクトの変数modelを引数として受け取るよ」という意味。
+- 3行目は「文字列サンプルテキストを変数sampleTextとして定義するよ」という意味。
+- 4行目は「変数modelに変数sampleTextの内容を追加するよ」という意味。
