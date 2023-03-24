@@ -186,3 +186,24 @@ public String showHello(Model model){
 - 2行目は「ここで定義するshowHelloメソッドを実行するときには、Modelオブジェクトの変数modelを引数として受け取るよ」という意味。
 - 3行目は「文字列サンプルテキストを変数sampleTextとして定義するよ」という意味。
 - 4行目は「変数modelに変数sampleTextの内容を追加するよ」という意味。
+
+# エンティティ
+エンティティとは、データベースと連携する際に、データを格納するためのオブジェクト。<br>
+エンティティには、テーブルの各カラムに対応した変数を用意する。<br>
+「id」と「memo」というカラムがある場合、エンティティの変数として「id」と「memo」を作成する。<br>
+Javaのプログラムからデータベースにデータを保存する際も、逆にデータを読み込む際もこのエンティティを使用する。
+```Java
+package in.techcamp.firstapp;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
+public class PostEntity {
+    private long id;
+    private String memo;
+}
+```
+Lombokというライブラリを使用して上記ようにリファクタリングをするのが一般的。<br>
+アノテーション「@AllArgsConstructor」はコンストラクタを、「@Data」はゲッターとセッターを省略することができる。
