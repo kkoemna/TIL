@@ -207,3 +207,35 @@ public class PostEntity {
 ```
 Lombokというライブラリを使用して上記ようにリファクタリングをするのが一般的。<br>
 アノテーション「@AllArgsConstructor」はコンストラクタを、「@Data」はゲッターとセッターを省略することができる。
+
+# リポジトリ
+リポジトリとは、Javaでデータベースを利用する際に必要な、SQLの操作をメソッドとして定義するもの。<br>
+Railsでは、Javaのリポジトリに相当するものはあらかじめ用意されていた。<br>
+例えば、RailsではTweet.allのようにallメソッドを実行することで、Tweetsテーブルのデータ全件を取得することができるが、これは、allメソッドを実行すると「select * from tweets」というSQLが発行されることがあらかじめ定義されているため。<br>
+このような定義は、Javaでは自分で実装する必要がある。その際使用するのがリポジトリ。<br>
+リポジトリを作成する際は`「クラス」ではなく「インターフェース」を選択する`
+```Java
+package in.techcamp.firstapp;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+
+@Mapper
+public interface PostRepository {
+    @Select("select * from posts")
+    List<PostEntity> findAll();
+}
+```
+このリポジトリでは、postsテーブルから全件データを取得するための「findAll」というメソッドを定義している。<br>
+MyBatisでSelect文を使ったメソッドを定義する場合は、以下のように記述する。
+```Java
+@Select("発行したいSQL")
+返り値のデータ型 メソッド名;
+```
+上記の例に当てはめると以下の通り。
+```Java
+@Select("select * from posts")
+List<PostEntity> findAll();
+```
