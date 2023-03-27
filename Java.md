@@ -239,3 +239,25 @@ MyBatisでSelect文を使ったメソッドを定義する場合は、以下の�
 @Select("select * from posts")
 List<PostEntity> findAll();
 ```
+
+# Form
+Formを作成するにあたって、以下の3つのステップに分けて学ぶ。
+1. Formクラスを作成する
+2. コントローラーを変更する
+3. ビューを作成する
+
+## ①Formクラスを作成する
+Formクラスとはフォームに入力されたデータを格納するためのクラス。<br>
+Railsの場合、フォームで入力されたデータを受け取るために、「params」というハッシュを利用した。<br>
+paramsはRailsによって自動的に生成され、コントローラー内で参照することにより入力されたデータを保存することができた。<br>
+このparamsに代わるものとして、Javaでは「Formクラス」を自前で作成する。
+```Java
+package in.techcamp.firstapp;
+
+import lombok.Data;
+
+@Data
+public class PostForm {
+    private String memo;
+}
+```
