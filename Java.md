@@ -261,3 +261,52 @@ public class PostForm {
     private String memo;
 }
 ```
+## ②コントローラーを変更する
+①で作成したFormクラスをビューに渡すことによって、フォームの入力内容とFormクラスを関連付ける。<br>
+↓変更後の「PostController」のコード
+```Java
+package in.techcamp.firstapp;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+@Controller
+@RequiredArgsConstructor
+public class PostController {
+    private final PostRepository postRepository;
+
+    @GetMapping("/hello")
+    public String showHello(Model model){
+        var sampleText = "サンプルテキスト";
+        model.addAttribute("sampleText", sampleText);
+        return "hello";
+    }
+
+    @GetMapping
+    public String showList(Model model){
+        var postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+        return "index";
+    }
+
+    @GetMapping("/postForm")
+    public String showPostForm(@ModelAttribute("postForm") PostForm form){
+        return "postForm";
+    }
+}
+```
+`@ModelAttribute`というアノテーションは、任意のデータをModel型のオブジェクトに格納することができる。<br>
+Spring BootではこのModel型オブジェクトは、データの一時保管場所のように活用することができる。<br>
+コントローラーでこの保管場所にデータを保管しておき、それをビューで呼び出すという使い方をする。<br>
+↓具体的な使い方
+```Java
+@ModelAttribute("呼び出すときの名称") 保存したい変数のデータ型　保存したい変数
+```
+↓今回の例でいうと
+```Java
+@ModelAttribute("postForm") PostForm form
+```
+このコードによって、「PostForm型」の「変数form」を登録して、後で「postForm」という名前で呼び出すことができるよ、という意味になる。
