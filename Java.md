@@ -310,3 +310,30 @@ Spring BootではこのModel型オブジェクトは、データの一時保管�
 @ModelAttribute("postForm") PostForm form
 ```
 このコードによって、「PostForm型」の「変数form」を登録して、後で「postForm」という名前で呼び出すことができるよ、という意味になる。
+
+# ③ビューを作成する
+「postForm.html」というファイルを作成する
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>新規投稿</title>
+</head>
+<body>
+<h1>新規投稿ページ</h1>
+<form action="#" th:action="@{/posts}" th:method="post" th:object="${postForm}">
+  <input type="text" id="summaryInput" th:field="*{memo}">
+  <button type="submit">作成</button>
+</form>
+</body>
+</html>
+```
+上記の記述のうち、以下のコードに注目。
+```html
+<form action="#" th:action="@{/posts}" th:method="post" th:object="${postForm}">
+```
+上記のコードは、Thymeleafを使って、以下の３つの指定をおこなっている。<br>
+`th:action="@{/posts}"`は、フォームで投稿がおこなわれた際に次にアクセスするURLを指定するための記述。ここでは`/posts`を指定している。<br>
+`th:method="post"`は、フォームで投稿がおこなわれた際に送信するHTTPメソッドを指定するための記述。ここでは投稿機能を実装しているので、HTTPメソッドは`POST`を指定する。<br>
+`th:object="${postForm}"`は、フォームの投稿内容を紐付けるFormクラスを指定するための記述。この記述によって、コントローラーで設定した`postForm`とフォームを紐付けている。<br>
