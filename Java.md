@@ -311,7 +311,7 @@ Spring BootではこのModel型オブジェクトは、データの一時保管�
 ```
 このコードによって、「PostForm型」の「変数form」を登録して、後で「postForm」という名前で呼び出すことができるよ、という意味になる。
 
-# ③ビューを作成する
+## ③ビューを作成する
 「postForm.html」というファイルを作成する
 ```html
 <!DOCTYPE html>
