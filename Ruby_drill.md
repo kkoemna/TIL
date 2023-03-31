@@ -101,3 +101,57 @@ puts "3教科の平均点は、#{(japanese_score + english_score + math_score) /
 average_score = (japanese_score + english_score + math_score) / 3
 ```
 平均点の出力の際には、文字列と数値の連結となるので、式展開かto_sメソッドを使うこと。
+# 4.クラスとインスタンス
+## 問題
+```Ruby
+class Article
+
+  def initialize(author, title, content)
+    @author = author
+    @title = title
+    @content = content
+  end
+
+end
+```
+上記のコードに追加を行い、以下の出力結果を得られるようにしてください。ただし、クラスとインスタンスを使用するものとします。
+```Ruby
+著者: 阿部
+タイトル: Rubyの素晴らしさについて
+本文: Awesome Ruby!
+```
+## 解答
+```Ruby
+class Article
+
+  def initialize(author, title, content)
+    @author = author
+    @title = title
+    @content = content
+  end
+
+  def author
+    @author
+  end
+
+  def title
+    @title
+  end
+
+  def content
+    @content
+  end
+
+end
+
+article = Article.new("阿部", "Rubyの素晴らしさについて", "Awesome Ruby!")
+puts "著者: #{article.author}"
+puts "タイトル: #{article.title}"
+puts "本文: #{article.content}"
+```
+## 解説
+Article.newでインスタンスを生成し、変数articleに代入する。その際に、`阿部`、`Rubyの素晴らしさについて`、`Awesome Ruby!`の3つを実引数に指定する。<br>
+initializeメソッドを定義して、インスタンス変数を宣言する。実引数として指定した値を、仮引数の`author`、`title`、`content`にそれぞれ渡している。<br>
+それにより、initializeメソッドで宣言されたインスタンス変数に、`阿部`、`Rubyの素晴らしさについて`、`Awesome Ruby!`という3つの値が代入される。<br>
+上記インスタンス変数の値を返すための専用のメソッド3種をそれぞれ定義する。<br>
+最後に定義づけたメソッドを呼び出す。
