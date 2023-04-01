@@ -337,3 +337,80 @@ Spring BootではこのModel型オブジェクトは、データの一時保管�
 `th:action="@{/posts}"`は、フォームで投稿がおこなわれた際に次にアクセスするURLを指定するための記述。ここでは`/posts`を指定している。<br>
 `th:method="post"`は、フォームで投稿がおこなわれた際に送信するHTTPメソッドを指定するための記述。ここでは投稿機能を実装しているので、HTTPメソッドは`POST`を指定する。<br>
 `th:object="${postForm}"`は、フォームの投稿内容を紐付けるFormクラスを指定するための記述。この記述によって、コントローラーで設定した`postForm`とフォームを紐付けている。<br>
+# 投稿の保存機能
+## リポジトリの変更
+データベースにデータを保存するメソッドを作成する。
+```Java
+package in.techcamp.firstapp;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+
+@Mapper
+public interface PostRepository {
+    @Select("select * from posts")
+    List<PostEntity> findAll();
+
+    @Insert("insert into posts (memo) values (#{memo})")
+    void insert(String memo);
+}
+```
+ここでは、`insert`という名称でデータ保存用のメソッドを定義している。<br>
+insertメソッドの引数で渡された変数memoを、postsテーブルのmemoカラムに保存するよう設定をおこなっている。
+## コントローラーの変更
+```Java
+package in.techcamp.firstapp;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+@RequiredArgsConstructor
+public class PostController {
+    private final PostRepository postRepository;
+
+    @GetMapping("/hello")
+    public String showHello(Model model){
+        var sampleText = "サンプルテキスト";
+        model.addAttribute("sampleText", sampleText);
+        return "hello";
+    }
+
+    @GetMapping
+    public String showList(Model model){
+        var postList = postRepository.findAll();
+        model.addAttribute("postList", postList);
+        return "index";
+    }
+
+    @GetMapping("/postForm")
+    public String showPostForm(@ModelAttribute("postForm") PostForm form){
+        return "postForm";
+    }
+
+    @PostMapping("/posts")
+    public String savePost(PostForm form){
+        postRepository.insert(form.getMemo());
+        return "redirect:/";
+    }
+}
+```
+前項で作成したビューで、投稿後は`/posts`にアクセスするよう設置した。<br>
+それに対応するため以下のアノテーションを設定している。
+```Java
+@PostMapping("/posts")
+```
+また、以下のコードによって、SQLへのデータ保存をおこなっている。
+```Java
+postRepository.insert(form.getMemo());
+```
+`form.getMemo()`は、formオブジェクトから、変数memoの値を取り出すためのコード。<br>
+取り出した変数の中身を、リポジトリで登録したinsertメソッドによって保存している。<br>
+保存後は、`return "redirect:/";`という記述によって、ルートパスにリダイレクトさせている。
