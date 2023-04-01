@@ -414,3 +414,50 @@ postRepository.insert(form.getMemo());
 `form.getMemo()`は、formオブジェクトから、変数memoの値を取り出すためのコード。<br>
 取り出した変数の中身を、リポジトリで登録したinsertメソッドによって保存している。<br>
 保存後は、`return "redirect:/";`という記述によって、ルートパスにリダイレクトさせている。
+# 一覧機能
+Formを作成するにあたって、以下の3つのステップに分けて学ぶ。
+1. コントローラーの変更
+2. エンティティの作成
+3. リポジトリの変更
+4. ビューの作成
+## ①コントローラーの変更
+```Java
+package in.techcamp.issueapp;
+
+import lombok.AllArgsConstructor;
+import org.springframework.boot.Banner;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+@AllArgsConstructor
+public class IssueController {
+
+    private final IssueRepository issueRepository;
+
+    @GetMapping("/issueForm")
+    public String showIssueForm(@ModelAttribute("issueForm") IssueForm form){
+        return "issueForm";
+    }
+
+    @PostMapping("/issues")
+    public String createIssue(IssueForm issueForm){
+        issueRepository.insert(issueForm.getTitle(), issueForm.getContent(), issueForm.getPeriod(), issueForm.getImportance());
+        return "redirect:/";
+    }
+
+    @GetMapping
+    public String showIssues(Model model){
+        var issueList = issueRepository.findAll();
+        model.addAttribute("issueList", issueList);
+        return "index";
+    }
+}
+```
+- ルートパスが指定された場合にメソッドが実行される
+- イシュー全件のデータを「issueList」という変数に格納する
+- issueListの中身は、リポジトリの「findAll」というメソッドを用いて取得する
+- 表示するHTMLの名称は「index」とする
