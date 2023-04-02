@@ -461,3 +461,28 @@ public class IssueController {
 - イシュー全件のデータを「issueList」という変数に格納する
 - issueListの中身は、リポジトリの「findAll」というメソッドを用いて取得する
 - 表示するHTMLの名称は「index」とする
+## ②エンティティの作成
+```Java
+package in.techcamp.issueapp;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
+public class IssueEntity {
+    private long id;
+    private String title;
+    private String content;
+    private String period;
+    private char importance;
+}
+```
+エンティティに含まれるフィールド
+| データ型 | 変数名      |
+| ------ | ---------- |
+| long   | id         |
+| String | title      |
+| String | content    |
+| String | period     |
+| char   | importance |
