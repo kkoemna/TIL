@@ -486,3 +486,58 @@ public class IssueEntity {
 | String | content    |
 | String | period     |
 | char   | importance |
+## ③リポジトリの変更
+```Java
+package in.techcamp.issueapp;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+
+@Mapper
+public interface IssueRepository {
+    @Insert("insert into issues (title, content, period, importance) values (#{title}, #{content}, #{period}, #{importance})")
+    void insert(String title, String content, String period, char importance);
+
+    @Select("select * from issues")
+    List<IssueEntity> findAll();
+}
+```
+- 追加するメソッド名：findAll
+- 追加するメソッドの仕様：issuesテーブルからデータを全件取得して結果をIssueEntity型のリストで返す
+## ④ビューの作成
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<a th:href="@{/issueForm}">新規作成</a>
+
+<table class="issue-table">
+    <tr>
+        <th>id</th>
+        <th>タイトル</th>
+        <th>内容</th>
+        <th>期限</th>
+        <th>重要度</th>
+    </tr>
+    <form method="post">
+        <tr th:each="issue:${issueList}">
+            <td th:text="${issue.getId()}"></td>
+            <td th:text="${issue.getTitle()}"></td>
+            <td th:text="${issue.getContent()}"></td>
+            <td th:text="${issue.getPeriod()}"></td>
+            <td th:text="${issue.getImportance()}"></td>
+        </tr>
+    </form>
+</table>
+
+</body>
+</html>
+```
