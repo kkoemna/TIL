@@ -541,3 +541,31 @@ public interface IssueRepository {
 </body>
 </html>
 ```
+# 詳細表示機能
+詳細表示機能を実装するにあたって、以下の3つのステップに分けて学ぶ。
+1. コントローラーの変更
+2. リポジトリの変更
+3. ビューの作成
+詳細表示をおこなうためには、ユーザーがどのidのイシューを表示したいのか選択できるようにする必要がある。<br>
+例えば、以下のようなURLが指定されたら、idが1番のイシューを表示するよう実装する。<br>
+`localhost:8080/issues/1`
+## ①コントローラーの変更
+以下のコードを追加する。
+```Java
+@GetMapping("/issues/{id}")
+public String issueDetail(@PathVariable long id, Model model){
+    var issue = issueRepository.findById(id);
+    model.addAttribute("issue", issue);
+    return "detail";
+}
+```
+上記コード内で、URLに含まれるidを取得しているのは以下の部分。
+```Java
+@GetMapping("/issues/{id}")
+public String issueDetail(@PathVariable long id, Model model){
+}
+```
+`@PathVariable`は、URLに含まれるパラメータを受け取るためのアノテーション。<br>
+@GetMappingの引数内で{id}という指定をおこない、このidを受け取るために、issueDetailメソッドの引数idの前に@PathVariableをつけている。
+## ②リポジトリの変更
+## ③ビューの作成
