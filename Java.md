@@ -569,4 +569,62 @@ public String issueDetail(@PathVariable long id, Model model){
 `@PathVariable`は、URLに含まれるパラメータを受け取るためのアノテーション。<br>
 @GetMappingの引数内で{id}という指定をおこない、このidを受け取るために、issueDetailメソッドの引数idの前に@PathVariableをつけている。
 ## ②リポジトリの変更
+以下のコードを追加する。
+```Java
+@Select("select * from issues where id = #{id}")
+IssueEntity findById(long id);
+```
+上記コードは、対象のイシューデータを検索するためのfindByIdメソッドを追加している。
 ## ③ビューの作成
+「detail.html」というファイルを作成し、以下のコードを記述する。
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>イシュー詳細</title>
+</head>
+<body>
+
+<header>
+    <a th:href="@{/}">IssueApp</a>
+</header>
+
+<div class="page-title">
+    <h1>イシュー詳細</h1>
+</div>
+
+<div class="form">
+    <form action="#" th:action="@{/issues/{issueId}/update(issueId=${issue.getId()})}" th:method="post" th:object="${issue}">
+        <div class="form_title">
+            <h2>タイトル</h2>
+            <input type="text" id="title" th:field="*{title}">
+        </div>
+        <div class="form_content">
+            <h2>内容</h2>
+            <textarea id="content" th:field="*{content}"></textarea>
+        </div>
+
+        <div class="form_period">
+            <h2>期限</h2>
+            <input type="date" id="period" th:field="*{period}">
+        </div>
+
+        <div class="form_importance">
+            <h2>重要度</h2>
+            <input type="text" id="importance" th:field="*{importance}">
+        </div>
+
+        <div class="form_submit">
+            <button type="submit">更新</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+```
+上記コードは、新規作成用フォームのコードとほぼ同じだが、データの送信先が異なる。<br>
+例えばイシューのidが1の場合、送信先のURLは`（ルートパス）/issues/1/update`になる。<br>
+この指定をformタグのaction属性でおこなっている。
