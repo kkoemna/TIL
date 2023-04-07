@@ -628,3 +628,137 @@ IssueEntity findById(long id);
 上記コードは、新規作成用フォームのコードとほぼ同じだが、データの送信先が異なる。<br>
 例えばイシューのidが1の場合、送信先のURLは`（ルートパス）/issues/1/update`になる。<br>
 この指定をformタグのaction属性でおこなっている。
+# 更新機能
+更新機能を実装するにあたって、以下の3つのステップに分けて学ぶ。
+1. コントローラーの変更
+2. リポジトリの変更
+3. 一覧画面の変更
+## ①コントローラーの変更
+```Java
+package in.techcamp.issueapp;
+
+import lombok.AllArgsConstructor;
+import org.springframework.boot.Banner;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+@AllArgsConstructor
+public class IssueController {
+
+    private final IssueRepository issueRepository;
+
+    @GetMapping("/issueForm")
+    public String showIssueForm(@ModelAttribute("issueForm") IssueForm form){
+        return "issueForm";
+    }
+
+    @PostMapping("/issues")
+    public String createIssue(IssueForm issueForm){
+        issueRepository.insert(issueForm.getTitle(), issueForm.getContent(), issueForm.getPeriod(), issueForm.getImportance());
+        return "redirect:/";
+    }
+
+    @GetMapping
+    public String showIssues(Model model){
+        var issueList = issueRepository.findAll();
+        model.addAttribute("issueList", issueList);
+        return "index";
+    }
+
+    @GetMapping("/issues/{id}")
+    public String issueDetail(@PathVariable long id, Model model){
+        var issue = issueRepository.findById(id);
+        model.addAttribute("issue", issue);
+        return "detail";
+    }
+
+    @PostMapping("/issues/{id}/update")
+    public String updateIssue(@PathVariable long id, IssueForm issueForm){
+        issueRepository.update(id, issueForm.getTitle(), issueForm.getContent(), issueForm.getPeriod(), issueForm.getImportance());
+        return "redirect:/";
+    }
+}
+```
+データ更新用のメソッド「updateIssue」を追加する。
+## ②リポジトリの変更
+```Java
+package in.techcamp.issueapp;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
+
+@Mapper
+public interface IssueRepository {
+    @Insert("insert into issues (title, content, period, importance) values (#{title}, #{content}, #{period}, #{importance})")
+    void insert(String title, String content, String period, char importance);
+
+    @Select("select * from issues")
+    List<IssueEntity> findAll();
+
+    @Select("select * from issues where id = #{id}")
+    IssueEntity findById(long id);
+
+    @Update("UPDATE issues SET title = #{title}, content = #{content}, period = #{period}, importance = #{importance} WHERE id =#{id}")
+    void update(long id, String title, String content, String period, char importance);
+}
+```
+データ更新用のメソッドを作成する。
+## ③一覧画面の変更
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>Title</title>
+</head>
+
+<body>
+
+<header>
+    <a th:href="@{/}">IssueApp</a>
+</header>
+
+<div class="page-title">
+    <h1>イシュー一覧</h1>
+</div>
+
+<div class="create-link">
+    <a th:href="@{/issueForm}">新規作成</a>
+</div>
+
+<table class="issue-table">
+    <tr>
+        <th>id</th>
+        <th>タイトル</th>
+        <th>内容</th>
+        <th>期限</th>
+        <th>重要度</th>
+    </tr>
+    <form method="post">
+        <tr th:each="issue:${issueList}">
+            <td th:text="${issue.getId()}"></td>
+            <td><a th:text="${issue.getTitle()}" th:href="@{/issues/{id}(id=${issue.getId()})}"></a></td>
+            <td th:text="${issue.getContent()}"></td>
+            <td th:text="${issue.getPeriod()}"></td>
+            <td th:text="${issue.getImportance()}"></td>
+        </tr>
+    </form>
+</table>
+
+</body>
+</html>
+```
+一覧画面から詳細画面に遷移できるようformタグ内に以下のコードを追加している。
+```html
+<td><a th:text="${issue.getTitle()}" th:href="@{/issues/{id}(id=${issue.getId()})}"></a></td>
+```
