@@ -762,3 +762,64 @@ public interface IssueRepository {
 ```html
 <td><a th:text="${issue.getTitle()}" th:href="@{/issues/{id}(id=${issue.getId()})}"></a></td>
 ```
+# 削除機能
+削除機能を実装するにあたって、以下の3つのステップに分けて学ぶ。
+1. 一覧画面に「削除」ボタンを追加する
+2. コントローラーに削除用のメソッドを追加する
+3. リポジトリに削除用のメソッドを追加する
+## ①一覧画面に「削除」ボタンを追加する
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+    <title>Title</title>
+</head>
+
+<body>
+
+<header>
+    <a th:href="@{/}">IssueApp</a>
+</header>
+
+<div class="page-title">
+    <h1>イシュー一覧</h1>
+</div>
+
+<div class="create-link">
+    <a th:href="@{/issueForm}">新規作成</a>
+</div>
+
+<table class="issue-table">
+    <tr>
+        <th>id</th>
+        <th>タイトル</th>
+        <th>内容</th>
+        <th>期限</th>
+        <th>重要度</th>
+        <th class="header-delete">削除</th>
+    </tr>
+    <form method="post">
+        <tr th:each="issue:${issueList}">
+            <td th:text="${issue.getId()}"></td>
+            <td><a th:text="${issue.getTitle()}" th:href="@{/issues/{id}(id=${issue.getId()})}"></a></td>
+            <td th:text="${issue.getContent()}"></td>
+            <td th:text="${issue.getPeriod()}"></td>
+            <td th:text="${issue.getImportance()}"></td>
+            <td><button type="submit" th:formaction="@{/issues/{id}/delete(id=${issue.getId()})}">削除</button></td>
+        </tr>
+    </form>
+</table>
+
+</body>
+</html>
+```
+今回追加したのは
+```html
+<th class="header-delete">削除</th>
+```
+および
+```html
+<td><button type="submit" th:formaction="@{/issues/{id}/delete(id=${issue.getId()})}">削除</button></td>
+```
