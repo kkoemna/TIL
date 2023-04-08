@@ -157,7 +157,9 @@ Javaのフレームワーク「Spring Boot」のテンプレートエンジン�
 ## Thymeleafの使い方
 ①表示させるためのHTMLを作成する<br>
 「main」→「resources」→「templates」内にHTMLファイルを作成する。ここではファイル名は「hello.html」とする。<br>
+
 ②コントローラーから①のHTMLファイルを読み込めるようにする<br>
+
 ```Java
 @Controller
 public class PostController {
@@ -167,6 +169,7 @@ public class PostController {
     }
 }
 ```
+
 5行目の`return "hello";`が、表示するHTMLファイルの名称を指定している。<br>
 `return "hello";`と記述することで、「templates」フォルダにある「hello.html」を呼び出すことができる（.html部分は省略可能）。<br>
 
@@ -175,6 +178,7 @@ Sping Bootでは、Model型のオブジェクトを使用して、以下の流�
 1. コントローラーの引数でModelオブジェクトを受け取る
 2. Modelオブジェクトに、ビューで表示させたいデータを追加する
 3. ビューでModelオブジェクトのデータを読み込む
+
 ```Java
 @GetMapping("/hello")
 public String showHello(Model model){
@@ -183,6 +187,7 @@ public String showHello(Model model){
     return "hello";
 }
 ```
+
 - 2行目は「ここで定義するshowHelloメソッドを実行するときには、Modelオブジェクトの変数modelを引数として受け取るよ」という意味。
 - 3行目は「文字列サンプルテキストを変数sampleTextとして定義するよ」という意味。
 - 4行目は「変数modelに変数sampleTextの内容を追加するよ」という意味。
@@ -192,6 +197,7 @@ public String showHello(Model model){
 エンティティには、テーブルの各カラムに対応した変数を用意する。<br>
 「id」と「memo」というカラムがある場合、エンティティの変数として「id」と「memo」を作成する。<br>
 Javaのプログラムからデータベースにデータを保存する際も、逆にデータを読み込む際もこのエンティティを使用する。
+
 ```Java
 package in.techcamp.firstapp;
 
@@ -205,6 +211,7 @@ public class PostEntity {
     private String memo;
 }
 ```
+
 Lombokというライブラリを使用して上記ようにリファクタリングをするのが一般的。<br>
 アノテーション「@AllArgsConstructor」はコンストラクタを、「@Data」はゲッターとセッターを省略することができる。
 
@@ -214,6 +221,7 @@ Railsでは、Javaのリポジトリに相当するものはあらかじめ用�
 例えば、RailsではTweet.allのようにallメソッドを実行することで、Tweetsテーブルのデータ全件を取得することができるが、これは、allメソッドを実行すると「select * from tweets」というSQLが発行されることがあらかじめ定義されているため。<br>
 このような定義は、Javaでは自分で実装する必要がある。その際使用するのがリポジトリ。<br>
 リポジトリを作成する際は`「クラス」ではなく「インターフェース」を選択する`
+
 ```Java
 package in.techcamp.firstapp;
 
@@ -228,29 +236,36 @@ public interface PostRepository {
     List<PostEntity> findAll();
 }
 ```
+
 このリポジトリでは、postsテーブルから全件データを取得するための「findAll」というメソッドを定義している。<br>
 MyBatisでSelect文を使ったメソッドを定義する場合は、以下のように記述する。
+
 ```Java
 @Select("発行したいSQL")
 返り値のデータ型 メソッド名;
 ```
+
 上記の例に当てはめると以下の通り。
+
 ```Java
 @Select("select * from posts")
 List<PostEntity> findAll();
 ```
 
 # Form
+
 Formを作成するにあたって、以下の3つのステップに分けて学ぶ。
 1. Formクラスを作成する
 2. コントローラーを変更する
 3. ビューを作成する
 
 ## ①Formクラスを作成する
+
 Formクラスとはフォームに入力されたデータを格納するためのクラス。<br>
 Railsの場合、フォームで入力されたデータを受け取るために、「params」というハッシュを利用した。<br>
 paramsはRailsによって自動的に生成され、コントローラー内で参照することにより入力されたデータを保存することができた。<br>
 このparamsに代わるものとして、Javaでは「Formクラス」を自前で作成する。
+
 ```Java
 package in.techcamp.firstapp;
 
@@ -261,9 +276,12 @@ public class PostForm {
     private String memo;
 }
 ```
+
 ## ②コントローラーを変更する
+
 ①で作成したFormクラスをビューに渡すことによって、フォームの入力内容とFormクラスを関連付ける。<br>
 ↓変更後の「PostController」のコード
+
 ```Java
 package in.techcamp.firstapp;
 
@@ -298,21 +316,28 @@ public class PostController {
     }
 }
 ```
+
 `@ModelAttribute`というアノテーションは、任意のデータをModel型のオブジェクトに格納することができる。<br>
 Spring BootではこのModel型オブジェクトは、データの一時保管場所のように活用することができる。<br>
 コントローラーでこの保管場所にデータを保管しておき、それをビューで呼び出すという使い方をする。<br>
 ↓具体的な使い方
+
 ```Java
 @ModelAttribute("呼び出すときの名称") 保存したい変数のデータ型　保存したい変数
 ```
+
 ↓今回の例でいうと
+
 ```Java
 @ModelAttribute("postForm") PostForm form
 ```
+
 このコードによって、「PostForm型」の「変数form」を登録して、後で「postForm」という名前で呼び出すことができるよ、という意味になる。
 
 ## ③ビューを作成する
+
 「postForm.html」というファイルを作成する
+
 ```html
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -329,17 +354,24 @@ Spring BootではこのModel型オブジェクトは、データの一時保管�
 </body>
 </html>
 ```
+
 上記の記述のうち、以下のコードに注目。
+
 ```html
 <form action="#" th:action="@{/posts}" th:method="post" th:object="${postForm}">
 ```
+
 上記のコードは、Thymeleafを使って、以下の３つの指定をおこなっている。<br>
 `th:action="@{/posts}"`は、フォームで投稿がおこなわれた際に次にアクセスするURLを指定するための記述。ここでは`/posts`を指定している。<br>
 `th:method="post"`は、フォームで投稿がおこなわれた際に送信するHTTPメソッドを指定するための記述。ここでは投稿機能を実装しているので、HTTPメソッドは`POST`を指定する。<br>
-`th:object="${postForm}"`は、フォームの投稿内容を紐付けるFormクラスを指定するための記述。この記述によって、コントローラーで設定した`postForm`とフォームを紐付けている。<br>
+`th:object="${postForm}"`は、フォームの投稿内容を紐付けるFormクラスを指定するための記述。この記述によって、コントローラーで設定した`postForm`とフォームを紐付けている。
+
 # 投稿の保存機能
+
 ## リポジトリの変更
+
 データベースにデータを保存するメソッドを作成する。
+
 ```Java
 package in.techcamp.firstapp;
 
@@ -358,9 +390,12 @@ public interface PostRepository {
     void insert(String memo);
 }
 ```
+
 ここでは、`insert`という名称でデータ保存用のメソッドを定義している。<br>
 insertメソッドの引数で渡された変数memoを、postsテーブルのmemoカラムに保存するよう設定をおこなっている。
+
 ## コントローラーの変更
+
 ```Java
 package in.techcamp.firstapp;
 
@@ -402,25 +437,34 @@ public class PostController {
     }
 }
 ```
+
 前項で作成したビューで、投稿後は`/posts`にアクセスするよう設置した。<br>
 それに対応するため以下のアノテーションを設定している。
+
 ```Java
 @PostMapping("/posts")
 ```
+
 また、以下のコードによって、SQLへのデータ保存をおこなっている。
+
 ```Java
 postRepository.insert(form.getMemo());
 ```
+
 `form.getMemo()`は、formオブジェクトから、変数memoの値を取り出すためのコード。<br>
 取り出した変数の中身を、リポジトリで登録したinsertメソッドによって保存している。<br>
 保存後は、`return "redirect:/";`という記述によって、ルートパスにリダイレクトさせている。
+
 # 一覧機能
+
 一覧機能を実装するにあたって、以下の4つのステップに分けて学ぶ。
 1. コントローラーの変更
 2. エンティティの作成
 3. リポジトリの変更
 4. ビューの作成
+
 ## ①コントローラーの変更
+
 ```Java
 package in.techcamp.issueapp;
 
@@ -457,11 +501,14 @@ public class IssueController {
     }
 }
 ```
+
 - ルートパスが指定された場合にメソッドが実行される
 - イシュー全件のデータを「issueList」という変数に格納する
 - issueListの中身は、リポジトリの「findAll」というメソッドを用いて取得する
 - 表示するHTMLの名称は「index」とする
+
 ## ②エンティティの作成
+
 ```Java
 package in.techcamp.issueapp;
 
@@ -478,6 +525,7 @@ public class IssueEntity {
     private char importance;
 }
 ```
+
 エンティティに含まれるフィールド
 | データ型 | 変数名      |
 | ------ | ---------- |
@@ -486,7 +534,9 @@ public class IssueEntity {
 | String | content    |
 | String | period     |
 | char   | importance |
+
 ## ③リポジトリの変更
+
 ```Java
 package in.techcamp.issueapp;
 
@@ -505,9 +555,12 @@ public interface IssueRepository {
     List<IssueEntity> findAll();
 }
 ```
+
 - 追加するメソッド名：findAll
 - 追加するメソッドの仕様：issuesテーブルからデータを全件取得して結果をIssueEntity型のリストで返す
+
 ## ④ビューの作成
+
 ```html
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -541,7 +594,9 @@ public interface IssueRepository {
 </body>
 </html>
 ```
+
 # 詳細表示機能
+
 詳細表示機能を実装するにあたって、以下の3つのステップに分けて学ぶ。
 1. コントローラーの変更
 2. リポジトリの変更
@@ -550,8 +605,11 @@ public interface IssueRepository {
 詳細表示をおこなうためには、ユーザーがどのidのイシューを表示したいのか選択できるようにする必要がある。<br>
 例えば、以下のようなURLが指定されたら、idが1番のイシューを表示するよう実装する。<br>
 `localhost:8080/issues/1`
+
 ## ①コントローラーの変更
+
 以下のコードを追加する。
+
 ```Java
 @GetMapping("/issues/{id}")
 public String issueDetail(@PathVariable long id, Model model){
@@ -560,23 +618,33 @@ public String issueDetail(@PathVariable long id, Model model){
     return "detail";
 }
 ```
+
 上記コード内で、URLに含まれるidを取得しているのは以下の部分。
+
 ```Java
 @GetMapping("/issues/{id}")
 public String issueDetail(@PathVariable long id, Model model){
 }
 ```
+
 `@PathVariable`は、URLに含まれるパラメータを受け取るためのアノテーション。<br>
 @GetMappingの引数内で{id}という指定をおこない、このidを受け取るために、issueDetailメソッドの引数idの前に@PathVariableをつけている。
+
 ## ②リポジトリの変更
+
 以下のコードを追加する。
+
 ```Java
 @Select("select * from issues where id = #{id}")
 IssueEntity findById(long id);
 ```
+
 上記コードは、対象のイシューデータを検索するためのfindByIdメソッドを追加している。
+
 ## ③ビューの作成
+
 「detail.html」というファイルを作成し、以下のコードを記述する。
+
 ```html
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -625,15 +693,20 @@ IssueEntity findById(long id);
 </body>
 </html>
 ```
+
 上記コードは、新規作成用フォームのコードとほぼ同じだが、データの送信先が異なる。<br>
 例えばイシューのidが1の場合、送信先のURLは`（ルートパス）/issues/1/update`になる。<br>
 この指定をformタグのaction属性でおこなっている。
+
 # 更新機能
+
 更新機能を実装するにあたって、以下の3つのステップに分けて学ぶ。
 1. コントローラーの変更
 2. リポジトリの変更
 3. 一覧画面の変更
+
 ## ①コントローラーの変更
+
 ```Java
 package in.techcamp.issueapp;
 
@@ -684,8 +757,11 @@ public class IssueController {
     }
 }
 ```
+
 データ更新用のメソッド「updateIssue」を追加する。
+
 ## ②リポジトリの変更
+
 ```Java
 package in.techcamp.issueapp;
 
@@ -711,8 +787,11 @@ public interface IssueRepository {
     void update(long id, String title, String content, String period, char importance);
 }
 ```
+
 データ更新用のメソッドを作成する。
+
 ## ③一覧画面の変更
+
 ```html
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -762,12 +841,16 @@ public interface IssueRepository {
 ```html
 <td><a th:text="${issue.getTitle()}" th:href="@{/issues/{id}(id=${issue.getId()})}"></a></td>
 ```
+
 # 削除機能
+
 削除機能を実装するにあたって、以下の3つのステップに分けて学ぶ。
 1. 一覧画面に「削除」ボタンを追加する
 2. コントローラーに削除用のメソッドを追加する
 3. リポジトリに削除用のメソッドを追加する
+
 ## ①一覧画面に「削除」ボタンを追加する
+
 ```html
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -815,11 +898,86 @@ public interface IssueRepository {
 </body>
 </html>
 ```
+
 今回追加したのは
+
 ```html
 <th class="header-delete">削除</th>
 ```
+
 および
+
 ```html
 <td><button type="submit" th:formaction="@{/issues/{id}/delete(id=${issue.getId()})}">削除</button></td>
 ```
+
+## ②コントローラーに削除用のメソッドを追加する
+
+```Java
+package in.techcamp.issueapp;
+
+import lombok.AllArgsConstructor;
+import org.springframework.boot.Banner;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+@AllArgsConstructor
+public class IssueController {
+
+    private final IssueRepository issueRepository;
+
+    @GetMapping("/issueForm")
+    public String showIssueForm(@ModelAttribute("issueForm") IssueForm form){
+        return "issueForm";
+    }
+
+    @PostMapping("/issues")
+    public String createIssue(IssueForm issueForm){
+        issueRepository.insert(issueForm.getTitle(), issueForm.getContent(), issueForm.getPeriod(), issueForm.getImportance());
+        return "redirect:/";
+    }
+
+    @GetMapping
+    public String showIssues(Model model){
+        var issueList = issueRepository.findAll();
+        model.addAttribute("issueList", issueList);
+        return "index";
+    }
+
+    @GetMapping("/issues/{id}")
+    public String issueDetail(@PathVariable long id, Model model){
+        var issue = issueRepository.findById(id);
+        model.addAttribute("issue", issue);
+        return "detail";
+    }
+
+    @PostMapping("/issues/{id}/update")
+    public String updateIssue(@PathVariable long id, IssueForm issueForm){
+        issueRepository.update(id, issueForm.getTitle(), issueForm.getContent(), issueForm.getPeriod(), issueForm.getImportance());
+        return "redirect:/";
+    }
+
+    @PostMapping("issues/{id}/delete")
+    public String deleteIssue(@PathVariable Long id){
+        issueRepository.deleteById(id);
+        return "redirect:/";
+    }
+}
+```
+
+以下が追加した削除用メソッド。
+
+```Java
+@PostMapping("issues/{id}/delete")
+public String deleteIssue(@PathVariable Long id){
+    issueRepository.deleteById(id);
+    return "redirect:/";
+}
+```
+
+## ③リポジトリに削除用のメソッドを追加する
