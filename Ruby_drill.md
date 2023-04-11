@@ -429,3 +429,95 @@ end
 
 puts sum
 ```
+
+# 10.配列を利用したrubyプログラムの作成
+## 問題
+以下の配列から任意の数字を探して何番目に含まれているかという結果を返すsearchメソッドを、`each_with_index`を用いて作成しましょう。
+
+```Ruby
+input = [3, 5, 9 ,12, 15, 21, 29, 35, 42, 51, 62, 78, 81, 87, 92, 93]
+```
+
+### 雛形
+```Ruby
+def search(target_num, input)
+  # 処理を記述
+end
+
+input = [3, 5, 9 ,12, 15, 21, 29, 35, 42, 51, 62, 78, 81, 87, 92, 93]
+# 呼び出し例
+search(11, input)
+```
+
+### 出力例
+search(5, input) → 2番目にあります
+
+search(12, input) → 4番目にあります
+
+search(7, input) → その数は含まれていません
+
+### ヒント
+`each_with_index`は、Rubyに標準で組み込まれているメソッドの1つです。要素の繰り返し処理と同時に、その要素が何番目に処理されたのかも表すことができます。
+
+以下のように記述します。
+
+```Ruby
+配列名.each_with_index  do |item, i|
+
+end
+```
+
+具体的には以下のように使うことができます。
+
+```Ruby
+fruits = ["メロン", "バナナ", "アップル"]
+
+fruits.each_with_index do |item, i|
+ puts "#{i}番目のフルーツは、#{item}です。"
+end
+```
+
+これを実行すると、以下のような出力結果が得られます。
+
+```Ruby
+0番目のフルーツは、メロンです。
+1番目のフルーツは、バナナです。
+2番目のフルーツは、アップルです。
+```
+
+## 解答
+```Ruby
+def search(target_num, input)
+
+  input.each_with_index do |num, index|
+    if num == target_num
+      puts "#{index + 1}番目にあります"
+      return
+    end
+  end
+  puts "その数は含まれていません"
+end
+
+input = [3, 5, 9 ,12, 15, 21, 29, 35, 42, 51, 62, 78, 81, 87, 92, 93]
+search(11, input)
+```
+
+## 解説
+### searchメソッドを呼び出す際の処理
+まず、配列`input`を定義する。
+
+次に、`searchメソッド`を呼び出す際に、11とinputという変数を実引数としてセットする。<br>
+呼び出されたsearchメソッドでは、実引数でセットした値を仮引数target_numとinputとして受け取る。
+
+### searchメソッド内の処理
+まず、input.each_with_indexでは、inputに格納されている要素を1つ1つ`num`として取り出すと同時に、要素毎に割り当てられている添字を`index`として取得する。
+
+次に、if文で`num == target_num`という条件式を設定する。<br>
+ここでは、inputから取り出された要素numと、target_numが等しいかを判別している。
+
+numとtarget_numが等しければ、numがinputの中の何番目に含まれているかが出力される。<br>
+`#{index + 1}`としているのは、配列が0番目から始まることを考慮するため。
+
+numとtarget_numが等くなければ、「その数は含まれていません」と出力される。
+
+今回は、引数で渡した「11」は配列inputには含まれておらず、条件には当てはまらないため、「その数は含まれていません」と出力される。
