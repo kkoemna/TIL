@@ -117,3 +117,76 @@ trim(fgets(STDIN))
     echo $number * 10;
 ?>
 ```
+
+# 条件分岐
+## if文の基本
+```php
+<?php
+    $name = trim(fgets(STDIN));
+
+    if ($name == "PHP") {
+        echo "Welcome\n";
+    }
+?>
+```
+
+上記は、受け取ったデータが`PHP`と一致したら、`Welcome`と表示するプログラム。
+
+Rubyと違い、`条件式を()内`に記述し、`条件式に一致する場合の処理を{}内`に記述する。
+
+```php
+<?php
+    if (条件式) {
+        条件式に一致する場合の処理;
+    }
+?>
+```
+
+## 比較演算子
+比較演算子はRubyと同じ。
+
+- `a == b` aはbと等しい
+- `a != b` aはbと等しくない
+- `a > b` aはbより大きい
+- `a < b` aはbより小さい
+- `a >= b` aはb以上
+- `a <= b` aはb以下
+
+## elseとelseif
+### else
+```php
+<?php
+    $name = trim(fgets(STDIN));
+    echo "Hello " . $name . "\n";
+
+    if ($name == "PHP") {
+        echo "Welcome\n";
+    } else {
+        echo "Goodbye\n";
+    }
+?>
+```
+
+上記では、条件と一致しなかった場合、`Goodbye`と表示する。
+
+条件と一致した場合の処理を{}で閉じたあと、`else`でつないで、条件と一致しなかった場合の処理を{}内に記述する。
+
+### elseif
+```php
+<?php
+    $name = trim(fgets(STDIN));
+    echo "Hello ".$name."\n";
+
+    if ($name == "PHP") {
+        echo "Welcome\n";
+    } elseif ($name == "php") {
+        echo "Good morning\n";
+    } else {
+        echo "Goodbye\n";
+    }
+?>
+```
+上記では、変数`$name`が`php（小文字）`の場合、`Good morning`と表示する。
+
+前条件の処理を{}で閉じたあと、`elseif`でつないで、新たな条件式を()内に記述し、それに一致する場合の処理を{}内に記述する。
+    if ($name == "PHP") {
