@@ -332,5 +332,11 @@ http://localhost:8000
 
 ```
 
+## @includeディレクティブ
+`@includeディレクティブ`は、Bladeテンプレートの中で別のBladeテンプレートを読み込むことができるディレクティブ。@includeディレクティブには、読み込むテンプレートの名前を指定する。例えば、@include(‘layouts.header’)というディレクティブは、resources/views/layouts/header.blade.phpというファイルを読み込む。
+
+
+
+
 
 
