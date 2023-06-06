@@ -335,8 +335,14 @@ http://localhost:8000
 ## @includeディレクティブ
 `@includeディレクティブ`は、Bladeテンプレートの中で別のBladeテンプレートを読み込むことができるディレクティブ。@includeディレクティブには、読み込むテンプレートの名前を指定する。例えば、@include(‘layouts.header’)というディレクティブは、resources/views/layouts/header.blade.phpというファイルを読み込む。
 
+### ミドルウェア
+Laravelにおけるミドルウェアは、コントローラーがアクションを呼び出す前や後に割り込んで指定の処理を実行するプログラムのこと。ユーザー認証やアクセス権限の確認、入力されたデータの検証などをおこなう。
 
+作成にはターミナルで以下のコマンドを実行する。
 
+```php
+php artisan make:middleware ミドルウェア名
+```
 
 
 
