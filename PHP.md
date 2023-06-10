@@ -368,7 +368,7 @@ this->validate($request, [ 検証設定の配列] );
 
 ▼例
 
-```
+```php
 $this->validate($request, [
     'name' => 'required|string|max:255',
     'email' => 'required|email|unique:users',
