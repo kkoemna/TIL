@@ -366,7 +366,16 @@ this->validate($request, [ 検証設定の配列] );
 ]
 ```
 
+▼例
 
+```
+$this->validate($request, [
+    'name' => 'required|string|max:255',
+    'email' => 'required|email|unique:users',
+]);
+```
+
+上記バリデーションは、nameは必須項目で、文字列で、最大255文字までOK。emailも必須項目で、正しいメールアドレス形式で、usersテーブル内に同じアドレスが存在しないかを検証している。
 
 
 
