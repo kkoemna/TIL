@@ -377,5 +377,30 @@ $this->validate($request, [
 
 上記バリデーションは、nameは必須項目で、文字列で、最大255文字までOK。emailも必須項目で、正しいメールアドレス形式で、usersテーブル内に同じアドレスが存在しないかを検証している。
 
+## バリデーションの種類
+Laravelにおける代表的なバリデーションの検証ルールは以下のとおり。
 
+1. required
+```
+'name'=>'required'
+nameは入力必須
+```
+
+2. email
+```
+'mail'=>'email'
+mailは正しいメールアドレス形式
+```
+
+3. numeric
+```
+'age'=>'numeric'
+ageは数値
+```
+
+4. min / max
+```
+'age'=>'min:18'
+ageは18以上
+```
 
